@@ -3,9 +3,11 @@ package com.thomaskim.koorweather.util;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.thomaskim.koorweather.db.City;
 import com.thomaskim.koorweather.db.County;
 import com.thomaskim.koorweather.db.Province;
+import com.thomaskim.koorweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,5 +87,20 @@ public class JsonUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * 将返回的JSON格式的数据解析城Weather类
+     */
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather");
+            String weatherContent=jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        } catch (JSONException e) {
+            LogUtil.d("Weather",e.getMessage());
+        }
+        return null;
     }
 }
