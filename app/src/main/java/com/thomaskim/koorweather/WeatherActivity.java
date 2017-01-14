@@ -1,5 +1,6 @@
 package com.thomaskim.koorweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.thomaskim.koorweather.gson.Forecast;
 import com.thomaskim.koorweather.gson.Weather;
+import com.thomaskim.koorweather.service.AutoUpdateService;
 import com.thomaskim.koorweather.util.HttpUtil;
 import com.thomaskim.koorweather.util.JsonUtil;
 import com.thomaskim.koorweather.util.LogUtil;
@@ -181,6 +183,8 @@ public class WeatherActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText(WeatherActivity.this, "从服务器获取天气信息失败", Toast.LENGTH_SHORT).show();
                         }
+                        Intent intent=new Intent(WeatherActivity.this, AutoUpdateService.class);
+                        startService(intent);
                         swipeRefresh.setRefreshing(false);
                     }
                 });
