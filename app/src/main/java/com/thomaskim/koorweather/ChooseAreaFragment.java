@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.thomaskim.koorweather.db.City;
 import com.thomaskim.koorweather.db.County;
 import com.thomaskim.koorweather.db.Province;
+import com.thomaskim.koorweather.gson.Weather;
 import com.thomaskim.koorweather.util.HttpUtil;
 import com.thomaskim.koorweather.util.JsonUtil;
 
@@ -84,10 +85,17 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 }else if(currentLevel==LEVEL_COUNTY){
                     String weatherId=countyList.get(position).getWeatherId();
-                    Intent intent=new Intent(getActivity(),WeatherActivity.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if(getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof WeatherActivity){
+                        WeatherActivity activity= (WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefresh.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+                    }
                 }
             }
         });
